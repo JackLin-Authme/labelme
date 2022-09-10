@@ -4,7 +4,6 @@ import uuid
 import numpy as np
 import PIL.Image
 import PIL.ImageDraw
-
 from labelme.logger import logger
 
 
@@ -42,8 +41,12 @@ def shape_to_mask(
         r = point_size
         draw.ellipse([cx - r, cy - r, cx + r, cy + r], outline=1, fill=1)
     else:
-        assert len(xy) > 2, "Polygon must have points more than 2"
-        draw.polygon(xy=xy, outline=1, fill=1)
+        assert len(xy) > 2, "Keypoints must have points more than 2"
+        # for i, (cx, cy) in enumerate(xy):
+        #     r = point_size
+        #     draw.ellipse([cx - r, cy - r, cx + r, cy + r], outline=1, fill=i)
+
+        draw.keypoints(xy=xy, fill=1, outline=1)
     mask = np.array(mask, dtype=bool)
     return mask
 

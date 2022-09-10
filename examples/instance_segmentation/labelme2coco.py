@@ -109,7 +109,7 @@ def main():
             points = shape["points"]
             label = shape["label"]
             group_id = shape.get("group_id")
-            shape_type = shape.get("shape_type", "polygon")
+            shape_type = shape.get("shape_type", "keypoints")
             mask = labelme.utils.shape_to_mask(
                 img.shape[:2], points, shape_type
             )

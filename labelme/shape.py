@@ -1,11 +1,9 @@
 import copy
 import math
 
-from qtpy import QtCore
-from qtpy import QtGui
+from qtpy import QtCore, QtGui
 
 import labelme.utils
-
 
 # TODO(unknown):
 # - [opt] Store paths instead of creating new ones at each paint.
@@ -85,9 +83,9 @@ class Shape(object):
     @shape_type.setter
     def shape_type(self, value):
         if value is None:
-            value = "polygon"
+            value = "keypoints"
         if value not in [
-            "polygon",
+            "keypoints",
             "rectangle",
             "point",
             "line",
@@ -107,7 +105,7 @@ class Shape(object):
             self.points.append(point)
 
     def canAddPoint(self):
-        return self.shape_type in ["polygon", "linestrip"]
+        return self.shape_type in ["keypoints", "linestrip"]
 
     def popPoint(self):
         if self.points:

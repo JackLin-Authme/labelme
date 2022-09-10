@@ -125,7 +125,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.labelList.itemChanged.connect(self.labelItemChanged)
         self.labelList.itemDropped.connect(self.labelOrderChanged)
         self.shape_dock = QtWidgets.QDockWidget(
-            self.tr("Polygon Labels"), self
+            self.tr("Keypoints Labels"), self
         )
         self.shape_dock.setObjectName("Labels")
         self.shape_dock.setWidget(self.labelList)
@@ -319,8 +319,8 @@ class MainWindow(QtWidgets.QMainWindow):
         toggle_keep_prev_mode.setChecked(self._config["keep_prev"])
 
         createMode = action(
-            self.tr("Create Polygons"),
-            lambda: self.toggleDrawMode(False, createMode="polygon"),
+            self.tr("Create Keypoints"),
+            lambda: self.toggleDrawMode(False, createMode="keypoints"),
             shortcuts["create_polygon"],
             "objects",
             self.tr("Start drawing polygons"),
@@ -367,7 +367,7 @@ class MainWindow(QtWidgets.QMainWindow):
             enabled=False,
         )
         editMode = action(
-            self.tr("Edit Polygons"),
+            self.tr("Edit Keypoints"),
             self.setEditMode,
             shortcuts["edit_polygon"],
             "edit",
@@ -376,7 +376,7 @@ class MainWindow(QtWidgets.QMainWindow):
         )
 
         delete = action(
-            self.tr("Delete Polygons"),
+            self.tr("Delete Keypoints"),
             self.deleteSelectedShape,
             shortcuts["delete_polygon"],
             "cancel",
@@ -384,7 +384,7 @@ class MainWindow(QtWidgets.QMainWindow):
             enabled=False,
         )
         duplicate = action(
-            self.tr("Duplicate Polygons"),
+            self.tr("Duplicate Keypoints"),
             self.duplicateSelectedShape,
             shortcuts["duplicate_polygon"],
             "copy",
@@ -392,7 +392,7 @@ class MainWindow(QtWidgets.QMainWindow):
             enabled=False,
         )
         copy = action(
-            self.tr("Copy Polygons"),
+            self.tr("Copy Keypoints"),
             self.copySelectedShape,
             shortcuts["copy_polygon"],
             "copy_clipboard",
@@ -400,7 +400,7 @@ class MainWindow(QtWidgets.QMainWindow):
             enabled=False,
         )
         paste = action(
-            self.tr("Paste Polygons"),
+            self.tr("Paste Keypoints"),
             self.pasteSelectedShape,
             shortcuts["paste_polygon"],
             "paste",
@@ -420,7 +420,7 @@ class MainWindow(QtWidgets.QMainWindow):
             slot=self.removeSelectedPoint,
             shortcut=shortcuts["remove_selected_point"],
             icon="edit",
-            tip="Remove selected point from polygon",
+            tip="Remove selected point from keypoints",
             enabled=False,
         )
 
@@ -553,16 +553,16 @@ class MainWindow(QtWidgets.QMainWindow):
             self.editLabel,
             shortcuts["edit_label"],
             "edit",
-            self.tr("Modify the label of the selected polygon"),
+            self.tr("Modify the label of the selected keypoints"),
             enabled=False,
         )
 
         fill_drawing = action(
-            self.tr("Fill Drawing Polygon"),
+            self.tr("Fill Drawing Keypoints"),
             self.canvas.setFillDrawing,
             None,
             "color",
-            self.tr("Fill polygon while drawing"),
+            self.tr("Fill keypoints while drawing"),
             checkable=True,
             enabled=True,
         )
@@ -949,7 +949,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.actions.undo.setEnabled(not drawing)
         self.actions.delete.setEnabled(not drawing)
 
-    def toggleDrawMode(self, edit=True, createMode="polygon"):
+    def toggleDrawMode(self, edit=True, createMode="keypoints"):
         self.canvas.setEditing(edit)
         self.canvas.createMode = createMode
         if edit:
@@ -960,7 +960,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.actions.createPointMode.setEnabled(True)
             self.actions.createLineStripMode.setEnabled(True)
         else:
-            if createMode == "polygon":
+            if createMode == "keypoints":
                 self.actions.createMode.setEnabled(False)
                 self.actions.createRectangleMode.setEnabled(True)
                 self.actions.createCircleMode.setEnabled(True)

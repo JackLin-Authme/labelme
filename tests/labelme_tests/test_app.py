@@ -92,7 +92,7 @@ def test_MainWindow_annotate_jpg(qtbot):
             label=label,
             group_id=None,
             points=points,
-            shape_type="polygon",
+            shape_type="keypoints",
             flags={},
             other_data={},
         )

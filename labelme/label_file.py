@@ -122,7 +122,7 @@ class LabelFile(object):
                 dict(
                     label=s["label"],
                     points=s["points"],
-                    shape_type=s.get("shape_type", "polygon"),
+                    shape_type=s.get("shape_type", "keypoints"),
                     flags=s.get("flags", {}),
                     group_id=s.get("group_id"),
                     other_data={
