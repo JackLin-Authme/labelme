@@ -137,12 +137,14 @@ class Shape(object):
                 self.select_line_color if self.selected else self.line_color
             )
             pen = QtGui.QPen(color)
+            font = QtGui.QFont("Monospace", 4, weight=QtGui.QFont.Thin)
             # Try using integer sizes for smoother drawing(?)
             pen.setWidth(max(1, int(round(2.0 / self.scale))))
             painter.setPen(pen)
 
             line_path = QtGui.QPainterPath()
             vrtx_path = QtGui.QPainterPath()
+            text_path = QtGui.QPainterPath()
 
             if self.shape_type == "rectangle":
                 assert len(self.points) in [1, 2]
@@ -171,14 +173,15 @@ class Shape(object):
                 # self.drawVertex(vrtx_path, 0)
 
                 for i, p in enumerate(self.points):
-                    line_path.lineTo(p)
+                    # line_path.lineTo(p)
                     self.drawVertex(vrtx_path, i)
-                if self.isClosed():
-                    line_path.lineTo(self.points[0])
+                # if self.isClosed():
+                #     line_path.lineTo(self.points[0])
 
             painter.drawPath(line_path)
             painter.drawPath(vrtx_path)
             painter.fillPath(vrtx_path, self._vertex_fill_color)
+
             if self.fill:
                 color = (
                     self.select_fill_color
@@ -187,8 +190,31 @@ class Shape(object):
                 )
                 painter.fillPath(line_path, color)
 
+            if self.group_id is not None:
+                x, y = self.points[0].x(), self.points[0].y()
+                text = str(self.group_id)
+                self.drawFlags(text_path, (x, y), font, text)
+                color = DEFAULT_SELECT_LINE_COLOR
+                painter.drawPath(text_path)
+                painter.fillPath(text_path, color)
+
+            if self.flags:
+                x = self.points[0].x()
+                y = self.points[1].y()
+                for k, v in self.flags.items():
+                    text = f'{k}: {v}'
+                    y += font.pointSize()
+                    self.drawFlags(text_path, (x, y), font, text)
+
+                color = DEFAULT_SELECT_LINE_COLOR
+                painter.drawPath(text_path)
+                painter.fillPath(text_path, color)
+
+    def drawFlags(self, path, p, font, text):
+        path.addText(*p, font, text)
+
     def drawVertex(self, path, i):
-        d = self.point_size / self.scale
+        d = self.point_size / self.scale / 1.8
         shape = self.point_type
         point = self.points[i]
         if i == self._highlightIndex:
