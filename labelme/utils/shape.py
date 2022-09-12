@@ -7,12 +7,12 @@ import PIL.ImageDraw
 from labelme.logger import logger
 
 
-def polygons_to_mask(img_shape, polygons, shape_type=None):
+def keypoints_to_mask(img_shape, keypoints, shape_type=None):
     logger.warning(
-        "The 'polygons_to_mask' function is deprecated, "
+        "The 'keypoints_to_mask' function is deprecated, "
         "use 'shape_to_mask' instead."
     )
-    return shape_to_mask(img_shape, points=polygons, shape_type=shape_type)
+    return shape_to_mask(img_shape, points=keypoints, shape_type=shape_type)
 
 
 def shape_to_mask(

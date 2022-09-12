@@ -413,7 +413,7 @@ filesave.ai</rdf:li>
        style="fill:url(#XMLID_2_);"
        d="M36.626,6.861c0,0-26.184,0-26.914,0c0,0.704,0,16.59,0,17.294c0.721,0,26.864,0,27.583,0     c0-0.704,0-16.59,0-17.294C36.988,6.861,36.626,6.861,36.626,6.861z"
        id="path618" />
-    <polygon
+    <keypoint
        id="path186_1_"
        style="fill:#FFFFFF;"
        points="35.809,6.486 10.221,6.486 10.221,23.405 36.788,23.405 36.788,6.486 " />
@@ -446,7 +446,7 @@ filesave.ai</rdf:li>
          style="stop-color:#F0F0F0"
          id="midPointStop625" />
     </linearGradient>
-    <polygon
+    <keypoint
        id="path186"
        style="fill:url(#path186_2_);"
        points="35.809,6.486 10.221,6.486 10.221,23.405 36.788,23.405 36.788,6.486 " />

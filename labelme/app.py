@@ -10,29 +10,20 @@ import webbrowser
 
 import imgviz
 import natsort
-from qtpy import QtCore
+from qtpy import QtCore, QtGui, QtWidgets
 from qtpy.QtCore import Qt
-from qtpy import QtGui
-from qtpy import QtWidgets
 
-from labelme import __appname__
-from labelme import PY2
-
-from . import utils
+from labelme import PY2, __appname__
 from labelme.config import get_config
-from labelme.label_file import LabelFile
-from labelme.label_file import LabelFileError
+from labelme.label_file import LabelFile, LabelFileError
 from labelme.logger import logger
 from labelme.shape import Shape
-from labelme.widgets import BrightnessContrastDialog
-from labelme.widgets import Canvas
-from labelme.widgets import FileDialogPreview
-from labelme.widgets import LabelDialog
-from labelme.widgets import LabelListWidget
-from labelme.widgets import LabelListWidgetItem
-from labelme.widgets import ToolBar
-from labelme.widgets import UniqueLabelQListWidget
-from labelme.widgets import ZoomWidget
+from labelme.widgets import (BrightnessContrastDialog, Canvas,
+                             FileDialogPreview, LabelDialog, LabelListWidget,
+                             LabelListWidgetItem, ToolBar,
+                             UniqueLabelQListWidget, ZoomWidget)
+
+from . import utils
 
 # FIXME
 # - [medium] Set max zoom value to something big enough for FitWidth/Window
@@ -321,9 +312,9 @@ class MainWindow(QtWidgets.QMainWindow):
         createMode = action(
             self.tr("Create Keypoints"),
             lambda: self.toggleDrawMode(False, createMode="keypoints"),
-            shortcuts["create_polygon"],
+            shortcuts["create_keypoint"],
             "objects",
-            self.tr("Start drawing polygons"),
+            self.tr("Start drawing keypoints"),
             enabled=False,
         )
         createRectangleMode = action(
@@ -369,42 +360,42 @@ class MainWindow(QtWidgets.QMainWindow):
         editMode = action(
             self.tr("Edit Keypoints"),
             self.setEditMode,
-            shortcuts["edit_polygon"],
+            shortcuts["edit_keypoint"],
             "edit",
-            self.tr("Move and edit the selected polygons"),
+            self.tr("Move and edit the selected keypoints"),
             enabled=False,
         )
 
         delete = action(
             self.tr("Delete Keypoints"),
             self.deleteSelectedShape,
-            shortcuts["delete_polygon"],
+            shortcuts["delete_keypoint"],
             "cancel",
-            self.tr("Delete the selected polygons"),
+            self.tr("Delete the selected keypoints"),
             enabled=False,
         )
         duplicate = action(
             self.tr("Duplicate Keypoints"),
             self.duplicateSelectedShape,
-            shortcuts["duplicate_polygon"],
+            shortcuts["duplicate_keypoint"],
             "copy",
-            self.tr("Create a duplicate of the selected polygons"),
+            self.tr("Create a duplicate of the selected keypoints"),
             enabled=False,
         )
         copy = action(
             self.tr("Copy Keypoints"),
             self.copySelectedShape,
-            shortcuts["copy_polygon"],
+            shortcuts["copy_keypoint"],
             "copy_clipboard",
-            self.tr("Copy selected polygons to clipboard"),
+            self.tr("Copy selected keypoints to clipboard"),
             enabled=False,
         )
         paste = action(
             self.tr("Paste Keypoints"),
             self.pasteSelectedShape,
-            shortcuts["paste_polygon"],
+            shortcuts["paste_keypoint"],
             "paste",
-            self.tr("Paste copied polygons"),
+            self.tr("Paste copied keypoints"),
             enabled=False,
         )
         undoLastPoint = action(
@@ -434,17 +425,17 @@ class MainWindow(QtWidgets.QMainWindow):
         )
 
         hideAll = action(
-            self.tr("&Hide\nPolygons"),
-            functools.partial(self.togglePolygons, False),
+            self.tr("&Hide\nKeypoints"),
+            functools.partial(self.toggleKeypoints, False),
             icon="eye",
-            tip=self.tr("Hide all polygons"),
+            tip=self.tr("Hide all keypoints"),
             enabled=False,
         )
         showAll = action(
-            self.tr("&Show\nPolygons"),
-            functools.partial(self.togglePolygons, True),
+            self.tr("&Show\nKeypoints"),
+            functools.partial(self.toggleKeypoints, True),
             icon="eye",
-            tip=self.tr("Show all polygons"),
+            tip=self.tr("Show all keypoints"),
             enabled=False,
         )
 
@@ -1452,7 +1443,7 @@ class MainWindow(QtWidgets.QMainWindow):
         contrast = dialog.slider_contrast.value()
         self.brightnessContrast_values[self.filename] = (brightness, contrast)
 
-    def togglePolygons(self, value):
+    def toggleKeypoints(self, value):
         for item in self.labelList:
             item.setCheckState(Qt.Checked if value else Qt.Unchecked)
 
@@ -1938,7 +1929,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def deleteSelectedShape(self):
         yes, no = QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No
         msg = self.tr(
-            "You are about to permanently delete {} polygons, "
+            "You are about to permanently delete {} keypoints, "
             "proceed anyway?"
         ).format(len(self.canvas.selectedShapes))
         if yes == QtWidgets.QMessageBox.warning(

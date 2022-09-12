@@ -15,14 +15,14 @@ sort_labels: true
 validate_label: null
 
 default_shape_color: [0, 255, 0]
-shape_color: auto  # null, 'auto', 'manual'
+shape_color: auto # null, 'auto', 'manual'
 shift_auto_shape_color: 0
 label_colors: null
 
 shape:
   # drawing
   line_color: [0, 255, 0, 128]
-  fill_color: [0, 255, 0, 0]  # transparent
+  fill_color: [0, 255, 0, 0] # transparent
   vertex_fill_color: [0, 255, 0, 255]
   # selecting / hovering
   select_line_color: [255, 255, 255, 255]
@@ -63,7 +63,7 @@ fit_to_content:
 epsilon: 10.0
 canvas:
   # None: do nothing
-  # close: close polygon
+  # close: close keypoint
   double_click: close
   # The max number of edits we can undo
   num_backups: 10
@@ -87,17 +87,17 @@ shortcuts:
   fit_window: Ctrl+F
   fit_width: Ctrl+Shift+F
 
-  create_polygon: Ctrl+N
+  create_keypoint: Ctrl+N
   create_rectangle: Ctrl+R
   create_circle: null
   create_line: null
   create_point: null
   create_linestrip: null
-  edit_polygon: Ctrl+J
-  delete_polygon: Delete
-  duplicate_polygon: Ctrl+D
-  copy_polygon: Ctrl+C
-  paste_polygon: Ctrl+V
+  edit_keypoint: Ctrl+J
+  delete_keypoint: Delete
+  duplicate_keypoint: Ctrl+D
+  copy_keypoint: Ctrl+C
+  paste_keypoint: Ctrl+V
   undo: Ctrl+Z
   undo_last_point: Ctrl+Z
   add_point_to_edge: Ctrl+Shift+P

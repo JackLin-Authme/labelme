@@ -23,7 +23,7 @@
         ]
       ],
       "group_id": null,
-      "shape_type": "polygon",
+      "shape_type": "keypoint",
       "flags": {}
     },
     {
@@ -71,7 +71,7 @@
         ]
       ],
       "group_id": null,
-      "shape_type": "polygon",
+      "shape_type": "keypoint",
       "flags": {}
     },
     {
@@ -115,7 +115,7 @@
         ]
       ],
       "group_id": null,
-      "shape_type": "polygon",
+      "shape_type": "keypoint",
       "flags": {}
     },
     {
@@ -235,7 +235,7 @@
         ]
       ],
       "group_id": null,
-      "shape_type": "polygon",
+      "shape_type": "keypoint",
       "flags": {}
     }
   ],

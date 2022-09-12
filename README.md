@@ -6,7 +6,7 @@ This labelme is used to label box, keypoints and multi-class label on an instanc
 
 ## Box with multi-class label
 
-Labelme provide shape-based flags to label multi-class for each shape
+Labelme provides shape-based flags to label multi-class for each shape
 
 You can load default shape-based flags with a json file (such as [file](./examples/face-flags.json))
 

@@ -1,0 +1,27 @@
+box:
+  hard: false
+  # occlusion (multi-label)
+  glass: false
+  sunglass: false
+  hair: false
+  mask: false
+  other: false
+  nose_occlusion: false
+  chin_occlusion: false
+  face_left_occlusion: false
+  face_right_occlusion: false
+  beard: false
+  # emotion (one-label)
+  neutral: false
+  anger: false
+  disgust: false
+  fear: false
+  happiness: false
+  sadness: false
+  surprise: false
+  # mouth status (multi-label)
+  smile: false
+  close_mouth: false
+  open_mouth: false
+lmk5pt:
+  hard: false

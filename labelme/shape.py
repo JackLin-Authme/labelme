@@ -135,7 +135,7 @@ class Shape(object):
                 self.select_line_color if self.selected else self.line_color
             )
             pen = QtGui.QPen(color)
-            font = QtGui.QFont("Monospace", 4, weight=QtGui.QFont.Thin)
+            font = QtGui.QFont("", 4, weight=QtGui.QFont.Normal)
             # Try using integer sizes for smoother drawing(?)
             pen.setWidth(max(1, int(round(2.0 / self.scale))))
             painter.setPen(pen)
@@ -197,8 +197,12 @@ class Shape(object):
                 painter.fillPath(text_path, color)
 
             if self.flags:
-                x = self.points[0].x()
-                y = self.points[1].y()
+                if self.shape_type == 'rectangle':
+                    x = self.points[0].x()
+                    y = self.points[1].y()
+                else:
+                    x = self.points[-1].x()
+                    y = self.points[-1].y()
                 for k, v in self.flags.items():
                     text = f'{k}: {v}'
                     y += font.pointSize()
