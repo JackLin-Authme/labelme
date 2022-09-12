@@ -1,1 +1,1 @@
-python ../labelme/__main__.py . --labelflags face-flags.json
+ipython --pdb -- labelme/__main__.py . --labelflags examples/face-flags.json

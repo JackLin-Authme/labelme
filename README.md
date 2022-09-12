@@ -10,8 +10,8 @@ Labelme provide shape-based flags to label multi-class for each shape
 
 You can load default shape-based flags with a json file (such as [file](./examples/face-flags.json))
 
-```bash
-python labelme/__main__.py ${data_folder} --labelsflags face-flags.json
-```
+## Example for fast hands-on
 
-To see [simple](./examples/) example for fast hands-on.
+```bash
+ipython --pdb -- labelme/__main__.py examples --labelflags examples/face-flags.json
+```
