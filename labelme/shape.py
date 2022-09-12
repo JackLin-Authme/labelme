@@ -196,21 +196,21 @@ class Shape(object):
                 painter.drawPath(text_path)
                 painter.fillPath(text_path, color)
 
-            if self.flags:
-                if self.shape_type == 'rectangle':
-                    x = self.points[0].x()
-                    y = self.points[1].y()
-                else:
-                    x = self.points[-1].x()
-                    y = self.points[-1].y()
-                for k, v in self.flags.items():
-                    text = f'{k}: {v}'
-                    y += font.pointSize()
-                    self.drawFlags(text_path, (x, y), font, text)
+            # if self.flags:
+            #     if self.shape_type == 'rectangle':
+            #         x = self.points[0].x()
+            #         y = self.points[1].y()
+            #     else:
+            #         x = self.points[-1].x()
+            #         y = self.points[-1].y()
+            #     text = ""
+            #     for k, v in self.flags.items():
+            #         text += f'{k}: {v} \n'
+            #     self.drawFlags(text_path, (x, y), font, text)
 
-                color = DEFAULT_SELECT_LINE_COLOR
-                painter.drawPath(text_path)
-                painter.fillPath(text_path, color)
+            #     color = DEFAULT_SELECT_LINE_COLOR
+            #     painter.drawPath(text_path)
+            #     painter.fillPath(text_path, color)
 
     def drawFlags(self, path, p, font, text):
         path.addText(*p, font, text)
