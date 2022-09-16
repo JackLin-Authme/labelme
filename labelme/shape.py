@@ -135,7 +135,7 @@ class Shape(object):
                 self.select_line_color if self.selected else self.line_color
             )
             pen = QtGui.QPen(color)
-            font = QtGui.QFont("", 4, weight=QtGui.QFont.Normal)
+            font = QtGui.QFont("", 2, weight=QtGui.QFont.Normal)
             # Try using integer sizes for smoother drawing(?)
             pen.setWidth(max(1, int(round(2.0 / self.scale))))
             painter.setPen(pen)

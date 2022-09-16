@@ -1,17 +1,24 @@
 box:
-  hard: false
-  # occlusion (multi-label)
+  "#hard to recog(multi-label)": false
+  hard_to_recog: false
+  "#wearing (multi-label)": false
   glass: false
   sunglass: false
-  hair: false
   mask: false
-  other: false
-  nose_occlusion: false
-  chin_occlusion: false
-  face_left_occlusion: false
-  face_right_occlusion: false
+  hat: false
+  hair: false
   beard: false
-  # emotion (one-label)
+  "#face landmark occlusion (multi-label)": false
+  eyebow_left_occlusion: false
+  eyebow_right_occlusion: false
+  eye_left_occlusion: false
+  eye_right_occlusion: false
+  nose_occlusion: false
+  cheek_left_occlusion: false
+  cheek_right_occlusion: false
+  mouth_occlusion: false
+  chin_occlusion: false
+  "#emotion (one-label)": false
   neutral: false
   anger: false
   disgust: false
@@ -19,9 +26,8 @@ box:
   happiness: false
   sadness: false
   surprise: false
-  # mouth status (multi-label)
+  uncertainty: false
+  "#mouth status (multi-label)": false
   smile: false
   close_mouth: false
   open_mouth: false
-lmk5pt:
-  hard: false
