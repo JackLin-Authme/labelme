@@ -1,33 +1,49 @@
 box:
-  "#hard to recog(multi-label)": false
-  hard_to_recog: false
-  "#wearing (multi-label)": false
-  glass: false
-  sunglass: false
-  mask: false
-  hat: false
-  hair: false
-  beard: false
-  "#face landmark occlusion (multi-label)": false
-  eyebow_left_occlusion: false
-  eyebow_right_occlusion: false
-  eye_left_occlusion: false
-  eye_right_occlusion: false
-  nose_occlusion: false
-  cheek_left_occlusion: false
-  cheek_right_occlusion: false
-  mouth_occlusion: false
-  chin_occlusion: false
-  "#emotion (one-label)": false
-  neutral: false
-  anger: false
-  disgust: false
-  fear: false
-  happiness: false
-  sadness: false
-  surprise: false
-  uncertainty: false
-  "#mouth status (multi-label)": false
-  smile: false
-  close_mouth: false
-  open_mouth: false
+  "#CanRecog": false
+  Easy: false
+  Medium: false
+  Hard: false
+  "#Wearing": false
+  Glass: false
+  Sunglass: false
+  Mask: false
+  Hat: false
+  Hair: false
+  Beard: false
+  "#Occlusion": false
+  EyebrowLeft: false
+  EyebrowRight: false
+  EyeLeft: false
+  EyeRight: false
+  Nose: false
+  CheekLeft: false
+  CheekRight: false
+  Mouth: false
+  Chin: false
+  "#Emotion": false
+  Neutral: false
+  Anger: false
+  Disgust: false
+  Fear: false
+  Happiness: false
+  Sadness: false
+  Surprise: false
+  Uncertainty: false
+  "#MouthStatus": false
+  Smile: false
+  Close: false
+  Open: false
+  "#EyeStatus": false
+  LeftOpen: false
+  LeftClose: false
+  RightOpen: false
+  RightClose: false
+lmk5pt:
+  "#Pose": false
+  LeftProfile: false
+  LeftFrontal: false
+  Frontal: false
+  RightFrontal: false
+  RightProfile: false
+  UpFrontal: false
+  DownFrontal: false
