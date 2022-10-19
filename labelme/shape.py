@@ -135,7 +135,7 @@ class Shape(object):
                 self.select_line_color if self.selected else self.line_color
             )
             pen = QtGui.QPen(color)
-            font = QtGui.QFont("", 2, weight=QtGui.QFont.Normal)
+            font = QtGui.QFont("", 4, weight=QtGui.QFont.Normal)
             # Try using integer sizes for smoother drawing(?)
             pen.setWidth(max(1, int(round(2.0 / self.scale))))
             painter.setPen(pen)
@@ -171,7 +171,6 @@ class Shape(object):
                 # self.drawVertex(vrtx_path, 0)
 
                 for i, p in enumerate(self.points):
-                    # line_path.lineTo(p)
                     self.drawVertex(vrtx_path, i)
                 # if self.isClosed():
                 #     line_path.lineTo(self.points[0])
@@ -191,7 +190,7 @@ class Shape(object):
             if self.group_id is not None:
                 x, y = self.points[0].x(), self.points[0].y()
                 text = str(self.group_id)
-                self.drawFlags(text_path, (x, y), font, text)
+                self.drawFlags(text_path, (x - 2, y - 2), font, text)
                 color = DEFAULT_SELECT_LINE_COLOR
                 painter.drawPath(text_path)
                 painter.fillPath(text_path, color)

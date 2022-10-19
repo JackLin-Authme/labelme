@@ -217,11 +217,18 @@ class MainWindow(QtWidgets.QMainWindow):
             self.tr("Open image or label file"),
         )
         opendir = action(
-            self.tr("&Open Dir"),
+            self.tr("&Open Dir (Images)"),
             self.openDirDialog,
             shortcuts["open_dir"],
             "open",
-            self.tr("Open Dir"),
+            self.tr("Open Dir (Images)"),
+        )
+        opendir_json = action(
+            self.tr("&Open Dir (Jsons)"),
+            self.openDirDialogJson,
+            shortcuts["open_dir_json"],
+            "open",
+            self.tr("Open Dir (Jsons)"),
         )
         openNextImg = action(
             self.tr("&Next Image"),
@@ -604,7 +611,7 @@ class MainWindow(QtWidgets.QMainWindow):
             zoomActions=zoomActions,
             openNextImg=openNextImg,
             openPrevImg=openPrevImg,
-            fileMenuActions=(open_, opendir, save, saveAs, close, quit),
+            fileMenuActions=(open_, opendir, opendir_json, save, saveAs, close, quit),
             tool=(),
             # XXX: need to add some actions here to activate the shortcut
             editMenu=(
@@ -669,6 +676,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 openNextImg,
                 openPrevImg,
                 opendir,
+                opendir_json,
                 self.menus.recentFiles,
                 save,
                 saveAs,
@@ -724,6 +732,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.actions.tool = (
             open_,
             opendir,
+            opendir_json,
             openNextImg,
             openPrevImg,
             save,
@@ -731,12 +740,12 @@ class MainWindow(QtWidgets.QMainWindow):
             None,
             createMode,
             editMode,
-            duplicate,
-            copy,
-            paste,
-            delete,
-            undo,
-            brightnessContrast,
+            # duplicate,
+            # copy,
+            # paste,
+            # delete,
+            # undo,
+            # brightnessContrast,
             None,
             zoom,
             fitWidth,
@@ -1975,6 +1984,29 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         self.importDirImages(targetDirPath)
 
+    def openDirDialogJson(self, _value=False, dirpath=None):
+        if not self.mayContinue():
+            return
+
+        defaultOpenDirPath = dirpath if dirpath else "."
+        if self.lastOpenDir and osp.exists(self.lastOpenDir):
+            defaultOpenDirPath = self.lastOpenDir
+        else:
+            defaultOpenDirPath = (
+                osp.dirname(self.filename) if self.filename else "."
+            )
+
+        targetDirPath = str(
+            QtWidgets.QFileDialog.getExistingDirectory(
+                self,
+                self.tr("%s - Open Directory") % __appname__,
+                defaultOpenDirPath,
+                QtWidgets.QFileDialog.ShowDirsOnly
+                | QtWidgets.QFileDialog.DontResolveSymlinks,
+            )
+        )
+        self.importDirJsons(targetDirPath)
+
     @property
     def imageList(self):
         lst = []
@@ -2032,7 +2064,7 @@ class MainWindow(QtWidgets.QMainWindow):
             if self.output_dir:
                 label_file_without_path = osp.basename(label_file)
                 label_file = osp.join(self.output_dir, label_file_without_path)
-            item = QtWidgets.QListWidgetItem(filename)
+            item = QtWidgets.QListWidgetItem(label_file)
             item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
             if QtCore.QFile.exists(label_file) and LabelFile.is_label_file(
                 label_file
@@ -2053,6 +2085,42 @@ class MainWindow(QtWidgets.QMainWindow):
         for root, dirs, files in os.walk(folderPath):
             for file in files:
                 if file.lower().endswith(tuple(extensions)):
+                    relativePath = osp.join(root, file)
+                    images.append(relativePath)
+        images = natsort.os_sorted(images)
+        return images
+
+    def importDirJsons(self, dirpath, pattern=None, load=True):
+        self.actions.openNextImg.setEnabled(True)
+        self.actions.openPrevImg.setEnabled(True)
+
+        if not self.mayContinue() or not dirpath:
+            return
+
+        self.lastOpenDir = dirpath
+        self.filename = None
+        self.fileListWidget.clear()
+        for label_file in self.scanAllJsons(dirpath):
+            if self.output_dir:
+                label_file_without_path = osp.basename(label_file)
+                label_file = osp.join(self.output_dir, label_file_without_path)
+            item = QtWidgets.QListWidgetItem(label_file)
+            item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
+            if QtCore.QFile.exists(label_file) and LabelFile.is_label_file(
+                label_file
+            ):
+                item.setCheckState(Qt.Checked)
+            else:
+                item.setCheckState(Qt.Unchecked)
+            self.fileListWidget.addItem(item)
+        self.openNextImg(load=load)
+
+    def scanAllJsons(self, folderPath):
+
+        images = []
+        for root, dirs, files in os.walk(folderPath):
+            for file in files:
+                if file.lower().endswith('.json'):
                     relativePath = osp.join(root, file)
                     images.append(relativePath)
         images = natsort.os_sorted(images)
