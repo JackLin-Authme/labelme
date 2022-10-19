@@ -1,0 +1,1 @@
+ipython --pdb -- labelme/__main__.py --labelflags label_flags/face_flags.yaml
