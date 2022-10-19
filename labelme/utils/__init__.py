@@ -6,5 +6,5 @@ from .image import (apply_exif_orientation, img_arr_to_b64, img_b64_to_arr,
                     img_pil_to_data)
 from .qt import (addActions, distance, distancetoline, fmtShortcut,
                  labelValidator, newAction, newButton, newIcon, struct)
-from .shape import (keypoints_to_mask, labelme_shapes_to_label,
-                    masks_to_bboxes, shape_to_mask, shapes_to_label)
+from .shape import (labelme_shapes_to_label, masks_to_bboxes, polygon_to_mask,
+                    shape_to_mask, shapes_to_label)

@@ -97,6 +97,7 @@ class MainWindow(QtWidgets.QMainWindow):
             completion=self._config["label_completion"],
             fit_to_content=self._config["fit_to_content"],
             flags=self._config["label_flags"],
+            contents=self._config["contents"],
         )
 
         self.labelList = LabelListWidget()
@@ -116,7 +117,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.labelList.itemChanged.connect(self.labelItemChanged)
         self.labelList.itemDropped.connect(self.labelOrderChanged)
         self.shape_dock = QtWidgets.QDockWidget(
-            self.tr("Keypoints Labels"), self
+            self.tr("Polygon Labels"), self
         )
         self.shape_dock.setObjectName("Labels")
         self.shape_dock.setWidget(self.labelList)
@@ -316,7 +317,15 @@ class MainWindow(QtWidgets.QMainWindow):
         )
         toggle_keep_prev_mode.setChecked(self._config["keep_prev"])
 
-        createMode = action(
+        createPolygonMode = action(
+            self.tr("Create Polygon"),
+            lambda: self.toggleDrawMode(False, createMode="polygon"),
+            shortcuts["create_polygon"],
+            "objects",
+            self.tr("Start drawing polygon"),
+            enabled=False,
+        )
+        createKeypointsMode = action(
             self.tr("Create Keypoints"),
             lambda: self.toggleDrawMode(False, createMode="keypoints"),
             shortcuts["create_keypoint"],
@@ -365,44 +374,44 @@ class MainWindow(QtWidgets.QMainWindow):
             enabled=False,
         )
         editMode = action(
-            self.tr("Edit Keypoints"),
+            self.tr("Edit"),
             self.setEditMode,
-            shortcuts["edit_keypoint"],
+            shortcuts["edit"],
             "edit",
-            self.tr("Move and edit the selected keypoints"),
+            self.tr("Move and edit the selected shape"),
             enabled=False,
         )
 
         delete = action(
-            self.tr("Delete Keypoints"),
+            self.tr("Delete"),
             self.deleteSelectedShape,
-            shortcuts["delete_keypoint"],
+            shortcuts["delete"],
             "cancel",
-            self.tr("Delete the selected keypoints"),
+            self.tr("Delete the selected shape"),
             enabled=False,
         )
         duplicate = action(
-            self.tr("Duplicate Keypoints"),
+            self.tr("Duplicate"),
             self.duplicateSelectedShape,
-            shortcuts["duplicate_keypoint"],
+            shortcuts["duplicate"],
             "copy",
-            self.tr("Create a duplicate of the selected keypoints"),
+            self.tr("Create a duplicate of the selected shape"),
             enabled=False,
         )
         copy = action(
-            self.tr("Copy Keypoints"),
+            self.tr("Copy"),
             self.copySelectedShape,
-            shortcuts["copy_keypoint"],
+            shortcuts["copy"],
             "copy_clipboard",
-            self.tr("Copy selected keypoints to clipboard"),
+            self.tr("Copy selected shape to clipboard"),
             enabled=False,
         )
         paste = action(
-            self.tr("Paste Keypoints"),
+            self.tr("Paste"),
             self.pasteSelectedShape,
-            shortcuts["paste_keypoint"],
+            shortcuts["paste"],
             "paste",
-            self.tr("Paste copied keypoints"),
+            self.tr("Paste copied shape"),
             enabled=False,
         )
         undoLastPoint = action(
@@ -418,7 +427,7 @@ class MainWindow(QtWidgets.QMainWindow):
             slot=self.removeSelectedPoint,
             shortcut=shortcuts["remove_selected_point"],
             icon="edit",
-            tip="Remove selected point from keypoints",
+            tip="Remove selected point from points",
             enabled=False,
         )
 
@@ -432,17 +441,17 @@ class MainWindow(QtWidgets.QMainWindow):
         )
 
         hideAll = action(
-            self.tr("&Hide\nKeypoints"),
-            functools.partial(self.toggleKeypoints, False),
+            self.tr("&Hide\nShapes"),
+            functools.partial(self.toggleShapes, False),
             icon="eye",
-            tip=self.tr("Hide all keypoints"),
+            tip=self.tr("Hide all shapes"),
             enabled=False,
         )
         showAll = action(
-            self.tr("&Show\nKeypoints"),
-            functools.partial(self.toggleKeypoints, True),
+            self.tr("&Show\nShapes"),
+            functools.partial(self.toggleShapes, True),
             icon="eye",
-            tip=self.tr("Show all keypoints"),
+            tip=self.tr("Show all shapes"),
             enabled=False,
         )
 
@@ -551,16 +560,16 @@ class MainWindow(QtWidgets.QMainWindow):
             self.editLabel,
             shortcuts["edit_label"],
             "edit",
-            self.tr("Modify the label of the selected keypoints"),
+            self.tr("Modify the label of the selected shape"),
             enabled=False,
         )
 
         fill_drawing = action(
-            self.tr("Fill Drawing Keypoints"),
+            self.tr("Fill Drawing Shapes"),
             self.canvas.setFillDrawing,
             None,
             "color",
-            self.tr("Fill keypoints while drawing"),
+            self.tr("Fill shapes while drawing"),
             checkable=True,
             enabled=True,
         )
@@ -593,8 +602,9 @@ class MainWindow(QtWidgets.QMainWindow):
             undoLastPoint=undoLastPoint,
             undo=undo,
             removePoint=removePoint,
-            createMode=createMode,
             editMode=editMode,
+            createPolygonMode=createPolygonMode,
+            createKeypointsMode=createKeypointsMode,
             createRectangleMode=createRectangleMode,
             createCircleMode=createCircleMode,
             createLineMode=createLineMode,
@@ -628,7 +638,8 @@ class MainWindow(QtWidgets.QMainWindow):
             ),
             # menu shown at right click
             menu=(
-                createMode,
+                createPolygonMode,
+                createKeypointsMode,
                 createRectangleMode,
                 createCircleMode,
                 createLineMode,
@@ -646,7 +657,8 @@ class MainWindow(QtWidgets.QMainWindow):
             ),
             onLoadActive=(
                 close,
-                createMode,
+                createPolygonMode,
+                createKeypointsMode,
                 createRectangleMode,
                 createCircleMode,
                 createLineMode,
@@ -738,7 +750,7 @@ class MainWindow(QtWidgets.QMainWindow):
             save,
             deleteFile,
             None,
-            createMode,
+            createPolygonMode,
             editMode,
             # duplicate,
             # copy,
@@ -845,7 +857,8 @@ class MainWindow(QtWidgets.QMainWindow):
         utils.addActions(self.canvas.menus[0], menu)
         self.menus.edit.clear()
         actions = (
-            self.actions.createMode,
+            self.actions.createPolygonMode,
+            self.actions.createKeypointsMode,
             self.actions.createRectangleMode,
             self.actions.createCircleMode,
             self.actions.createLineMode,
@@ -876,7 +889,8 @@ class MainWindow(QtWidgets.QMainWindow):
     def setClean(self):
         self.dirty = False
         self.actions.save.setEnabled(False)
-        self.actions.createMode.setEnabled(True)
+        self.actions.createPolygonMode.setEnabled(True)
+        self.actions.createKeypointsMode.setEnabled(True)
         self.actions.createRectangleMode.setEnabled(True)
         self.actions.createCircleMode.setEnabled(True)
         self.actions.createLineMode.setEnabled(True)
@@ -949,19 +963,29 @@ class MainWindow(QtWidgets.QMainWindow):
         self.actions.undo.setEnabled(not drawing)
         self.actions.delete.setEnabled(not drawing)
 
-    def toggleDrawMode(self, edit=True, createMode="keypoints"):
+    def toggleDrawMode(self, edit=True, createMode="polygon"):
         self.canvas.setEditing(edit)
         self.canvas.createMode = createMode
         if edit:
-            self.actions.createMode.setEnabled(True)
+            self.actions.createPolygonMode.setEnabled(True)
+            self.actions.createKeypointsMode.setEnabled(True)
             self.actions.createRectangleMode.setEnabled(True)
             self.actions.createCircleMode.setEnabled(True)
             self.actions.createLineMode.setEnabled(True)
             self.actions.createPointMode.setEnabled(True)
             self.actions.createLineStripMode.setEnabled(True)
         else:
-            if createMode == "keypoints":
-                self.actions.createMode.setEnabled(False)
+            if createMode == "polygon":
+                self.actions.createPolygonMode.setEnabled(False)
+                self.actions.createKeypointsMode.setEnabled(True)
+                self.actions.createRectangleMode.setEnabled(True)
+                self.actions.createCircleMode.setEnabled(True)
+                self.actions.createLineMode.setEnabled(True)
+                self.actions.createPointMode.setEnabled(True)
+                self.actions.createLineStripMode.setEnabled(True)
+            elif createMode == "keypoints":
+                self.actions.createPolygonMode.setEnabled(True)
+                self.actions.createKeypointsMode.setEnabled(False)
                 self.actions.createRectangleMode.setEnabled(True)
                 self.actions.createCircleMode.setEnabled(True)
                 self.actions.createLineMode.setEnabled(True)
@@ -1452,7 +1476,7 @@ class MainWindow(QtWidgets.QMainWindow):
         contrast = dialog.slider_contrast.value()
         self.brightnessContrast_values[self.filename] = (brightness, contrast)
 
-    def toggleKeypoints(self, value):
+    def toggleShapes(self, value):
         for item in self.labelList:
             item.setCheckState(Qt.Checked if value else Qt.Unchecked)
 
@@ -1938,7 +1962,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def deleteSelectedShape(self):
         yes, no = QtWidgets.QMessageBox.Yes, QtWidgets.QMessageBox.No
         msg = self.tr(
-            "You are about to permanently delete {} keypoints, "
+            "You are about to permanently delete {} shape, "
             "proceed anyway?"
         ).format(len(self.canvas.selectedShapes))
         if yes == QtWidgets.QMessageBox.warning(

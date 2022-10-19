@@ -29,8 +29,8 @@ class Canvas(QtWidgets.QWidget):
     CREATE, EDIT = 0, 1
     CREATE, EDIT = 0, 1
 
-    # keypoints, rectangle, line, or point
-    _createMode = "keypoints"
+    # polygon, keypoints, rectangle, line, or point
+    _createMode = "polygon"
 
     _fill_drawing = False
 
@@ -98,6 +98,7 @@ class Canvas(QtWidgets.QWidget):
     @createMode.setter
     def createMode(self, value):
         if value not in [
+            "polygon",
             "keypoints",
             "rectangle",
             "circle",
@@ -195,7 +196,7 @@ class Canvas(QtWidgets.QWidget):
         self.prevMovePoint = pos
         self.restoreCursor()
 
-        # Keypoints drawing.
+        # Shape drawing.
         if self.drawing():
             self.line.shape_type = self.createMode
 
@@ -211,7 +212,7 @@ class Canvas(QtWidgets.QWidget):
             elif (
                 self.snapping
                 and len(self.current) > 1
-                and self.createMode == "keypoints"
+                and (self.createMode == "keypoints" or self.createMode == "polygon")
                 and self.closeEnough(pos, self.current[0])
             ):
                 # Attract line to starting point and
@@ -219,7 +220,7 @@ class Canvas(QtWidgets.QWidget):
                 pos = self.current[0]
                 self.overrideCursor(CURSOR_POINT)
                 self.current.highlightVertex(0, Shape.NEAR_VERTEX)
-            if self.createMode in ["keypoints", "linestrip"]:
+            if self.createMode in ["polygon", "keypoints", "linestrip"]:
                 self.line[0] = self.current[-1]
                 self.line[1] = pos
             elif self.createMode == "rectangle":
@@ -351,7 +352,12 @@ class Canvas(QtWidgets.QWidget):
             if self.drawing():
                 if self.current:
                     # Add point to existing shape.
-                    if self.createMode == "keypoints":
+                    if self.createMode == "polygon":
+                        self.current.addPoint(self.line[1])
+                        self.line[0] = self.current[-1]
+                        if self.current.isClosed():
+                            self.finalise()
+                    elif self.createMode == "keypoints":
                         self.current.addPoint(self.line[1])
                         self.line[0] = self.current[-1]
                         if self.current.isClosed():
@@ -631,7 +637,7 @@ class Canvas(QtWidgets.QWidget):
 
         if (
             self.fillDrawing()
-            and self.createMode == "keypoints"
+            and (self.createMode == "polygon" or self.createMode == "keypoints")
             and self.current is not None
             and len(self.current.points) >= 2
         ):
@@ -829,7 +835,7 @@ class Canvas(QtWidgets.QWidget):
         assert self.shapes
         self.current = self.shapes.pop()
         self.current.setOpen()
-        if self.createMode in ["keypoints", "linestrip"]:
+        if self.createMode in ["polygon", "keypoints", "linestrip"]:
             self.line.points = [self.current[-1], self.current[0]]
         elif self.createMode in ["rectangle", "line", "circle"]:
             self.current.points = self.current.points[0:1]

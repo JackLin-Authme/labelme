@@ -83,8 +83,9 @@ class Shape(object):
     @shape_type.setter
     def shape_type(self, value):
         if value is None:
-            value = "keypoints"
+            value = "polygon"
         if value not in [
+            "polygon",
             "keypoints",
             "rectangle",
             "point",
@@ -105,7 +106,7 @@ class Shape(object):
             self.points.append(point)
 
     def canAddPoint(self):
-        return self.shape_type in ["keypoints", "linestrip"]
+        return self.shape_type in ["polygon", "linestrip"]
 
     def popPoint(self):
         if self.points:
@@ -163,17 +164,16 @@ class Shape(object):
                 for i, p in enumerate(self.points):
                     line_path.lineTo(p)
                     self.drawVertex(vrtx_path, i)
-            else:
+            elif self.shape_type == 'polygon':
                 line_path.moveTo(self.points[0])
-                # Uncommenting the following line will draw 2 paths
-                # for the 1st vertex, and make it non-filled, which
-                # may be desirable.
-                # self.drawVertex(vrtx_path, 0)
-
+                for i, p in enumerate(self.points):
+                    line_path.lineTo(p)
+                    self.drawVertex(vrtx_path, i)
+                if self.isClosed():
+                    line_path.lineTo(self.points[0])
+            elif self.shape_type == 'keypoints':
                 for i, p in enumerate(self.points):
                     self.drawVertex(vrtx_path, i)
-                # if self.isClosed():
-                #     line_path.lineTo(self.points[0])
 
             painter.drawPath(line_path)
             painter.drawPath(vrtx_path)

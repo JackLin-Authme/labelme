@@ -7,12 +7,12 @@ import PIL.ImageDraw
 from labelme.logger import logger
 
 
-def keypoints_to_mask(img_shape, keypoints, shape_type=None):
+def polygon_to_mask(img_shape, polygon, shape_type=None):
     logger.warning(
-        "The 'keypoints_to_mask' function is deprecated, "
+        "The 'polygon_to_mask' function is deprecated, "
         "use 'shape_to_mask' instead."
     )
-    return shape_to_mask(img_shape, points=keypoints, shape_type=shape_type)
+    return shape_to_mask(img_shape, points=polygon, shape_type=shape_type)
 
 
 def shape_to_mask(
@@ -41,7 +41,7 @@ def shape_to_mask(
         r = point_size
         draw.ellipse([cx - r, cy - r, cx + r, cy + r], outline=1, fill=1)
     else:
-        assert len(xy) > 2, "Keypoints must have points more than 2"
+        assert len(xy) > 2, "Polygon or Keypoints must have points more than 2"
         draw.keypoints(xy=xy, fill=1, outline=1)
     mask = np.array(mask, dtype=bool)
     return mask

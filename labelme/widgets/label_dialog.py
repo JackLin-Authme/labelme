@@ -1,13 +1,9 @@
 import re
+from importlib.resources import contents
 
-from qtpy import QT_VERSION
-from qtpy import QtCore
-from qtpy import QtGui
-from qtpy import QtWidgets
-
-from labelme.logger import logger
 import labelme.utils
-
+from labelme.logger import logger
+from qtpy import QT_VERSION, QtCore, QtGui, QtWidgets
 
 QT5 = QT_VERSION[0] == "5"
 
@@ -38,6 +34,7 @@ class LabelDialog(QtWidgets.QDialog):
         completion="startswith",
         fit_to_content=None,
         flags=None,
+        contents=None,
     ):
         if fit_to_content is None:
             fit_to_content = {"row": False, "column": True}
@@ -176,14 +173,27 @@ class LabelDialog(QtWidgets.QDialog):
         for pattern, keys in self._flags.items():
             if re.match(pattern, label):
                 for key in keys:
-                    flags[key] = False
+                    if key == 'Text':
+                        flags[key] = ""
+                    else:
+                        flags[key] = False
+        # print(label)
+        # print(flags)
+        # print(self._flags)
         self.setFlags(flags)
 
     def setFlags(self, flags):
         self.deleteFlags()
         for key in flags:
-            item = QtWidgets.QCheckBox(key, self)
-            item.setChecked(flags[key])
+            if key == 'Text':
+                item = QtWidgets.QLineEdit(key, self)
+                if isinstance(flags[key], str):
+                    item.setText(flags[key])
+                else:
+                    item.setText("")
+            else:
+                item = QtWidgets.QCheckBox(key, self)
+                item.setChecked(flags[key])
             self.flagsLayout.addWidget(item)
             item.show()
 
@@ -191,7 +201,10 @@ class LabelDialog(QtWidgets.QDialog):
         flags = {}
         for i in range(self.flagsLayout.count()):
             item = self.flagsLayout.itemAt(i).widget()
-            flags[item.text()] = item.isChecked()
+            if isinstance(item, QtWidgets.QLineEdit):
+                flags["Text"] = item.displayText()
+            else:
+                flags[item.text()] = item.isChecked()
         return flags
 
     def getGroupId(self):

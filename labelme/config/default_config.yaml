@@ -13,6 +13,7 @@ labels: null
 file_search: null
 sort_labels: true
 validate_label: null
+contents: null
 
 default_shape_color: [0, 255, 0]
 shape_color: auto # null, 'auto', 'manual'
@@ -63,7 +64,7 @@ fit_to_content:
 epsilon: 10.0
 canvas:
   # None: do nothing
-  # close: close keypoint
+  # close: close polygon
   double_click: close
   # The max number of edits we can undo
   num_backups: 10
@@ -72,6 +73,7 @@ shortcuts:
   close: Ctrl+W
   open: Ctrl+O
   open_dir: Ctrl+U
+  open_dir_json: Ctrl+Y
   quit: Ctrl+Q
   save: Ctrl+S
   save_as: Ctrl+Shift+S
@@ -87,17 +89,18 @@ shortcuts:
   fit_window: Ctrl+F
   fit_width: Ctrl+Shift+F
 
-  create_keypoint: Ctrl+N
+  create_polygon: Ctrl+N
+  create_keypoint: Ctrl+K
   create_rectangle: Ctrl+R
   create_circle: null
   create_line: null
   create_point: null
   create_linestrip: null
-  edit_keypoint: Ctrl+J
-  delete_keypoint: Delete
-  duplicate_keypoint: Ctrl+D
-  copy_keypoint: Ctrl+C
-  paste_keypoint: Ctrl+V
+  edit: Ctrl+J
+  delete: Delete
+  duplicate: Ctrl+D
+  copy: Ctrl+C
+  paste: Ctrl+V
   undo: Ctrl+Z
   undo_last_point: Ctrl+Z
   add_point_to_edge: Ctrl+Shift+P
