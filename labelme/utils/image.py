@@ -55,6 +55,15 @@ def img_data_to_png_data(img_data):
             f.seek(0)
             return f.read()
 
+def img_data_to_jpg_data(img_data):
+    with io.BytesIO() as f:
+        f.write(img_data)
+        img = PIL.Image.open(f)
+
+        with io.BytesIO() as f:
+            img.save(f, "JPEG")
+            f.seek(0)
+            return f.read()
 
 def apply_exif_orientation(image):
     try:
