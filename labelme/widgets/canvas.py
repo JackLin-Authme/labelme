@@ -203,7 +203,8 @@ class Canvas(QtWidgets.QWidget):
             if not self.current:
                 return
 
-            if self.outOfPixmap(pos):
+            # if self.outOfPixmap(pos):
+            if False:
                 # Don't allow the user to draw outside the pixmap.
                 # Project the point to the pixmap's edges.
                 pos = self.intersectionPoint(self.current[-1], pos)
