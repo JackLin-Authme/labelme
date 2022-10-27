@@ -204,8 +204,9 @@ class Shape(object):
             #         y = self.points[-1].y()
             #     text = ""
             #     for k, v in self.flags.items():
-            #         text += f'{k}: {v} \n'
-            #     self.drawFlags(text_path, (x, y), font, text)
+            #         text = f'{k}: {v}'
+            #         y += font.pointSize()
+            #         self.drawFlags(text_path, (x, y), font, text)
 
             #     color = DEFAULT_SELECT_LINE_COLOR
             #     painter.drawPath(text_path)

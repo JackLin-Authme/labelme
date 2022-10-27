@@ -7,6 +7,7 @@ import os
 import os.path as osp
 import re
 import webbrowser
+from pathlib import Path
 
 import imgviz
 import natsort
@@ -2084,15 +2085,10 @@ class MainWindow(QtWidgets.QMainWindow):
         for filename in self.scanAllImages(dirpath):
             if pattern and pattern not in filename:
                 continue
-            label_file = osp.splitext(filename)[0] + ".json"
-            if self.output_dir:
-                label_file_without_path = osp.basename(label_file)
-                label_file = osp.join(self.output_dir, label_file_without_path)
-            item = QtWidgets.QListWidgetItem(label_file)
+            item = QtWidgets.QListWidgetItem(filename)
             item.setFlags(Qt.ItemIsEnabled | Qt.ItemIsSelectable)
-            if QtCore.QFile.exists(label_file) and LabelFile.is_label_file(
-                label_file
-            ):
+            flag = Path(filename).suffix.upper() in ['.JPG', '.JPEG', '.PNG', '.TIFF', '.TIF', '.BMP']
+            if QtCore.QFile.exists(filename) and flag:
                 item.setCheckState(Qt.Checked)
             else:
                 item.setCheckState(Qt.Unchecked)
