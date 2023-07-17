@@ -20,15 +20,6 @@ box:
   CheekRight: false
   Mouth: false
   Chin: false
-  "#Emotion": false
-  Neutral: false
-  Anger: false
-  Disgust: false
-  Fear: false
-  Happiness: false
-  Sadness: false
-  Surprise: false
-  Uncertainty: false
   "#MouthStatus": false
   Smile: false
   Close: false
@@ -38,6 +29,15 @@ box:
   LeftClose: false
   RightOpen: false
   RightClose: false
+  "#Emotion": false
+  Neutral: false
+  Anger: false
+  Disgust: false
+  Fear: false
+  Happiness: false
+  Sadness: false
+  Surprise: false
+  Uncertainty: false
 lmk5pt:
   "#Pose": false
   LeftProfile: false
